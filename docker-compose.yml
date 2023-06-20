@@ -4,16 +4,26 @@ networks:
   phpnginx:
     driver: bridge
 
+volumes:
+  app:
+
 services:
   php:
     build: .
     networks:
       - phpnginx
+    volumes:
+      - type: volume
+        source: app
+        target: /srv
+        volume:
+          nocopy: false
 
   nginx:
     image: nginx:latest
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - app:/srv:ro
     ports:
       - 8080:80
     networks:

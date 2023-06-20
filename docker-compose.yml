@@ -1,0 +1,23 @@
+version: '3.3'
+
+networks:
+  phpnginx:
+    driver: bridge
+
+services:
+  php:
+    build: .
+    networks:
+      - phpnginx
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 8080:80
+    networks:
+      - phpnginx
+    depends_on:
+      - php
+
